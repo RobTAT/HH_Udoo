@@ -47,6 +47,7 @@ void calculate_MeanStd(){
 	int Pctr = 0;
 	cout << "------------------- Result -------------------" << endl; 
 	cout << "Time Consumption : " << "  Average (ms) |  Std Dev (ms)  |" << endl;
+	cout << "Capture am image : " << average[Pctr] <<" | "<< std[Pctr] << endl; Pctr++;
 	cout << "Show color image : " << average[Pctr] <<" | "<< std[Pctr] << endl; Pctr++;
 	cout << "Save color image : " << average[Pctr] <<" | "<< std[Pctr] << endl; Pctr++;
 	cout << "Define an image* : " << average[Pctr] <<" | "<< std[Pctr] << endl; Pctr++;
