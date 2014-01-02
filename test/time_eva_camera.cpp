@@ -48,6 +48,7 @@ void calculate_MeanStd(){
 		}
 		cout << "------- here? After first average--------" << endl;
 		average[ctr] = average[ctr]/MAX_FRAME_NUMBER;
+		cout << "Average " << ctr << " : " << average[ctr] << time_unit_string << endl;
 
 		// Calculate Stadard Deviation
 		for(int Fctr=0; Fctr<MAX_FRAME_NUMBER; Fctr++){
@@ -57,6 +58,7 @@ void calculate_MeanStd(){
 		}
 		cout << "------- here? After first std--------" << endl;
 		std[ctr] = sqrt(std[ctr]/MAX_FRAME_NUMBER);
+		cout << "stdDev " << ctr << " : " << std[ctr] << time_unit_string << endl;
 	
 	}
 	int Pctr = 0;
@@ -155,6 +157,7 @@ Mat redFilter(const Mat& src)
 
 int main(int argc, char** argv) {
     int cameraNumber = 0;
+    float time_open_1st2nd3rdframe[4];
 
     auto start = std::chrono::high_resolution_clock::now();
     if (argc>1)
@@ -170,6 +173,7 @@ int main(int argc, char** argv) {
 
 	auto finish = std::chrono::high_resolution_clock::now();
 	cout << "Open Camera: " << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit << " "<< time_unit_string << endl;
+	time_open_1st2nd3rdframe[0] = (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit;
 
 	Mat cameraFrame;
 	start = std::chrono::high_resolution_clock::now();
@@ -180,6 +184,7 @@ int main(int argc, char** argv) {
         }
 	finish = std::chrono::high_resolution_clock::now();
 	cout << "-----------Capture First Frame: -----------------" << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit << " "<< time_unit_string << endl;
+	time_open_1st2nd3rdframe[1] = (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit;
 
 	start = std::chrono::high_resolution_clock::now();
         camera>>cameraFrame;
@@ -189,6 +194,7 @@ int main(int argc, char** argv) {
         }
 	finish = std::chrono::high_resolution_clock::now();
 	cout << "-----------Capture Second Frame: -----------------" << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit << " "<< time_unit_string << endl;
+	time_open_1st2nd3rdframe[2] = (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit;
 
 	start = std::chrono::high_resolution_clock::now();
         camera>>cameraFrame;
@@ -198,6 +204,7 @@ int main(int argc, char** argv) {
         }
 	finish = std::chrono::high_resolution_clock::now();
 	cout << "-----------Capture third Frame: -----------------" << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit << " "<< time_unit_string << endl;
+	time_open_1st2nd3rdframe[3] = (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit;
 
 
     while(Frame_ctr < MAX_FRAME_NUMBER) {
@@ -218,6 +225,14 @@ int main(int argc, char** argv) {
 	cout << "------------------- here? Before Entering cal_Meanstd() -------------------" << endl;
 
 	calculate_MeanStd();
+
+	cout << endl << endl;
+	cout << "---------- Open camera & 1st 2nd 3rd Frame -------------------" << endl; 
+	cout << "Time Consumption : " << " Average " << time_unit_string <<" | "<< endl;
+	cout << "Open Camera      : " << time_open_1st2nd3rdframe[0] << endl;
+	cout << "1st Frame        : " << time_open_1st2nd3rdframe[1] << endl;
+	cout << "2nd Frame        : " << time_open_1st2nd3rdframe[2] << endl;
+	cout << "3rd Frame        : " << time_open_1st2nd3rdframe[3] << endl;
 
     return 0;
 }
