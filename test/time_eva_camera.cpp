@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include <opencv2/opencv.hpp>
 #include <cstdlib>
 #include <time.h>
@@ -6,6 +7,15 @@
 #include <cmath>
 
 #define MAX_FRAME_NUMBER 200
+
+#define ms 1000000
+#define us 1000
+#define ns 1
+
+#define ms_str "ms"
+#define us_str "us"
+#define ns_str "ns"
+
 
 using namespace std;
 using namespace cv;
@@ -17,13 +27,16 @@ float timeMatrix [MAX_FRAME_NUMBER][8];
 int Frame_ctr = 0;
 int para_ctr = 0;
 
+int time_unit = us; // Modify unit of time here
+string time_unit_string = us_str; // Also the string
+
 int minRGB[3] = {70,15,15};
 int maxRGB[3] = {120,30,45};
 int minHSV[3] = {0,0,40};
 int maxHSV[3] = {26,40,255};
 
 
-void calculate_MeanDev(){
+void calculate_MeanStd(){
 	
 	float average[8],std[8];
 	cout << "------------------- here? After Define param array-------------------" << endl;
@@ -39,8 +52,8 @@ void calculate_MeanDev(){
 		// Calculate Stadard Deviation
 		for(int Fctr=0; Fctr<MAX_FRAME_NUMBER; Fctr++){
 			//std[ctr] += pow(timeMatrix[Fctr][ctr] - average[ctr],2);
-			//std[ctr] += (timeMatrix[Fctr][ctr]-average[ctr])*(timeMatrix[Fctr][ctr]-average[ctr]);
-			std[ctr] += timeMatrix[Fctr][ctr] - average[ctr];
+			std[ctr] += (timeMatrix[Fctr][ctr]-average[ctr])*(timeMatrix[Fctr][ctr]-average[ctr]);
+			//std[ctr] += timeMatrix[Fctr][ctr] - average[ctr];
 		}
 		cout << "------- here? After first std--------" << endl;
 		std[ctr] = sqrt(std[ctr]/MAX_FRAME_NUMBER);
@@ -48,7 +61,7 @@ void calculate_MeanDev(){
 	}
 	int Pctr = 0;
 	cout << "------------------- Result -------------------" << endl; 
-	cout << "Time Consumption : " << "  Average (ms) |  Std Dev (ms)  |" << endl;
+	cout << "Time Consumption : " << " Average " << time_unit_string <<" |  Dev " << time_unit_string << " | " << endl;
 	cout << "Capture an image : " << average[Pctr] <<" | "<< std[Pctr] << endl; Pctr++;
 	cout << "Show color image : " << average[Pctr] <<" | "<< std[Pctr] << endl; Pctr++;
 	cout << "Save color image : " << average[Pctr] <<" | "<< std[Pctr] << endl; Pctr++;
@@ -87,46 +100,44 @@ void eva_loop(VideoCapture camera){
             exit(1);
         }
 	auto finish = std::chrono::high_resolution_clock::now();
-	cout << "Capture an image: " << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/1000000 << "ms\n";
-	timeMatrix[Frame_ctr][para_ctr++] = (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/1000000;
+	cout << "Capture an image: " << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit << " "<< time_unit_string << endl;
+	timeMatrix[Frame_ctr][para_ctr++] = (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit;
 
-	//cv::Mat hsv;
-   	//cv::cvtColor(cameraFrame, hsv, CV_BGR2HSV);
 	start = std::chrono::high_resolution_clock::now();
 	imshow("Camera",cameraFrame);
 	finish = std::chrono::high_resolution_clock::now();
-	cout << "Show a color image: " << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/1000000 << "ms\n";
-	timeMatrix[Frame_ctr][para_ctr++] = (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/1000000;
+	cout << "Show a color image: " << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit << " "<< time_unit_string << endl;
+	timeMatrix[Frame_ctr][para_ctr++] = (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit;
 
 	start = std::chrono::high_resolution_clock::now();
 	imwrite( "./cameraImg.jpg", cameraFrame );
 	finish = std::chrono::high_resolution_clock::now();
-	cout << "Save a color image: " << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/1000000 << "ms\n";
-	timeMatrix[Frame_ctr][para_ctr++] = (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/1000000;
+	cout << "Save a color image: " << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit << " "<< time_unit_string << endl;
+	timeMatrix[Frame_ctr][para_ctr++] = (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit;
 
 	start = std::chrono::high_resolution_clock::now();
 	Mat SegedRGBImg, SegedHSVImg;
 	finish = std::chrono::high_resolution_clock::now();
-	cout << "Define an image: " << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/1000000 << "ms\n";
-	timeMatrix[Frame_ctr][para_ctr++] = (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/1000000;
+	cout << "Define an image: " << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit << " "<< time_unit_string << endl;
+	timeMatrix[Frame_ctr][para_ctr++] = (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit;
 
 	start = std::chrono::high_resolution_clock::now();
 	SegedRGBImg = colorSegRGB(cameraFrame);
 	finish = std::chrono::high_resolution_clock::now();
-	cout << "RGB Segmentation: " << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/1000000 << "ms\n";
-	timeMatrix[Frame_ctr][para_ctr++] = (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/1000000;
+	cout << "RGB Segmentation: " << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit << " "<< time_unit_string << endl;
+	timeMatrix[Frame_ctr][para_ctr++] = (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit;
 
 	start = std::chrono::high_resolution_clock::now();
 	SegedHSVImg = colorSegHSV(cameraFrame);
 	finish = std::chrono::high_resolution_clock::now();
-	cout << "HSV Segmentation: " << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/1000000 << "ms\n";
-	timeMatrix[Frame_ctr][para_ctr++] = (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/1000000;
+	cout << "HSV Segmentation: " << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit << " "<< time_unit_string << endl;
+	timeMatrix[Frame_ctr][para_ctr++] = (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit;
 
 	start = std::chrono::high_resolution_clock::now();
         imshow("Show a binary image",SegedRGBImg);
 	finish = std::chrono::high_resolution_clock::now();
-	cout << "Show a binary image: " << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/1000000 << "ms\n";
-	timeMatrix[Frame_ctr][para_ctr++] = (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/1000000;
+	cout << "Show a binary image: " << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit << " "<< time_unit_string << endl;
+	timeMatrix[Frame_ctr][para_ctr++] = (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit;
 
 	
 
@@ -158,7 +169,7 @@ int main(int argc, char** argv) {
     camera.set(CV_CAP_PROP_FRAME_HEIGHT,480);
 
 	auto finish = std::chrono::high_resolution_clock::now();
-	cout << "Open Camera: " << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/1000000 << "ms\n";
+	cout << "Open Camera: " << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit << " "<< time_unit_string << endl;
 
 	Mat cameraFrame;
 	start = std::chrono::high_resolution_clock::now();
@@ -168,7 +179,7 @@ int main(int argc, char** argv) {
             exit(1);
         }
 	finish = std::chrono::high_resolution_clock::now();
-	cout << "-----------Capture First Frame: -----------------" << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/1000000 << "ms\n";
+	cout << "-----------Capture First Frame: -----------------" << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit << " "<< time_unit_string << endl;
 
 	start = std::chrono::high_resolution_clock::now();
         camera>>cameraFrame;
@@ -177,7 +188,7 @@ int main(int argc, char** argv) {
             exit(1);
         }
 	finish = std::chrono::high_resolution_clock::now();
-	cout << "-----------Capture Second Frame: -----------------" << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/1000000 << "ms\n";
+	cout << "-----------Capture Second Frame: -----------------" << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit << " "<< time_unit_string << endl;
 
 	start = std::chrono::high_resolution_clock::now();
         camera>>cameraFrame;
@@ -186,7 +197,7 @@ int main(int argc, char** argv) {
             exit(1);
         }
 	finish = std::chrono::high_resolution_clock::now();
-	cout << "-----------Capture third Frame: -----------------" << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/1000000 << "ms\n";
+	cout << "-----------Capture third Frame: -----------------" << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/time_unit << " "<< time_unit_string << endl;
 
 
     while(Frame_ctr < MAX_FRAME_NUMBER) {
@@ -194,8 +205,8 @@ int main(int argc, char** argv) {
 	auto start1 = std::chrono::high_resolution_clock::now();
         eva_loop(camera);
 	auto finish1 = std::chrono::high_resolution_clock::now();
-	cout << "Overall: " << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish1-start1).count())/1000000 << "ms\n";
-	timeMatrix[Frame_ctr][para_ctr++] = (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish1-start1).count())/1000000;
+	cout << "Overall: " << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish1-start1).count())/time_unit << " "<< time_unit_string << endl;
+	timeMatrix[Frame_ctr][para_ctr++] = (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish1-start1).count())/time_unit;
         
 	char keypress = cv::waitKey(20);
         if (keypress==27) {
@@ -206,7 +217,7 @@ int main(int argc, char** argv) {
     }
 	cout << "------------------- here? Before Entering cal_Meanstd() -------------------" << endl;
 
-	calculate_MeanDev();
+	calculate_MeanStd();
 
     return 0;
 }
