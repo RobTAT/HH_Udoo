@@ -63,15 +63,15 @@ void calculate_MeanStd(){
 	}
 	int Pctr = 0;
 	cout << "------------------- Result -------------------" << endl; 
-	cout << "Time Consumption : " << " Average " << time_unit_string <<" |  Dev " << time_unit_string << " | " << endl;
-	cout << "Capture an image : " << average[Pctr] <<" | "<< std[Pctr] << endl; Pctr++;
-	cout << "Show color image : " << average[Pctr] <<" | "<< std[Pctr] << endl; Pctr++;
-	cout << "Save color image : " << average[Pctr] <<" | "<< std[Pctr] << endl; Pctr++;
-	cout << "Define an image* : " << average[Pctr] <<" | "<< std[Pctr] << endl; Pctr++;
-	cout << "RGB Segmentation : " << average[Pctr] <<" | "<< std[Pctr] << endl; Pctr++;
-	cout << "HSV Segmentation : " << average[Pctr] <<" | "<< std[Pctr] << endl; Pctr++;
-	cout << "Show binary image: " << average[Pctr] <<" | "<< std[Pctr] << endl; Pctr++;
-	cout << "Overall Duration : " << average[Pctr] <<" | "<< std[Pctr] << endl; Pctr++;
+	cout << "Time Consumption : " << " Average " << time_unit_string <<" |  Dev " << time_unit_string << " | " << " Per.   | " << endl;
+	cout << "Capture an image : " << average[Pctr] <<" | "<< std[Pctr] << " | "<< average[Pctr]*100/average[7] << "% | "<< endl; Pctr++;
+	cout << "Show color image : " << average[Pctr] <<" | "<< std[Pctr] << " | "<< average[Pctr]*100/average[7] << "% | "<< endl; Pctr++;
+	cout << "Save color image : " << average[Pctr] <<" | "<< std[Pctr] << " | "<< average[Pctr]*100/average[7] << "% | "<< endl; Pctr++;
+	cout << "Define an image* : " << average[Pctr] <<" | "<< std[Pctr] << " | "<< average[Pctr]*100/average[7] << "% | "<< endl; Pctr++;
+	cout << "RGB Segmentation : " << average[Pctr] <<" | "<< std[Pctr] << " | "<< average[Pctr]*100/average[7] << "% | "<< endl; Pctr++;
+	cout << "HSV Segmentation : " << average[Pctr] <<" | "<< std[Pctr] << " | "<< average[Pctr]*100/average[7] << "% | "<< endl; Pctr++;
+	cout << "Show binary image: " << average[Pctr] <<" | "<< std[Pctr] << " | "<< average[Pctr]*100/average[7] << "% | "<< endl; Pctr++;
+	cout << "Overall Duration : " << average[Pctr] <<" | "<< std[Pctr] << " | "<< average[Pctr]*100/average[7] << "% | "<< endl; Pctr++;
 }
 
 
@@ -224,9 +224,10 @@ int main(int argc, char** argv) {
     }
 	cout << "------------------- here? Before Entering cal_Meanstd() -------------------" << endl;
 
+	cout << endl;
 	calculate_MeanStd();
 
-	cout << endl << endl;
+	cout << endl;
 	cout << "---------- Open camera & 1st 2nd 3rd Frame -------------------" << endl; 
 	cout << "Time Consumption : " << " Average " << time_unit_string <<" | "<< endl;
 	cout << "Open Camera      : " << time_open_1st2nd3rdframe[0] << endl;
