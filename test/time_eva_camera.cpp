@@ -5,13 +5,15 @@
 #include <chrono>
 #include <cmath>
 
+#define MAX_FRAME_NUMBER 200
+
 using namespace std;
 using namespace cv;
 
 time_t t_start;
 time_t t_end;
 
-float timeMatrix [200][8];
+float timeMatrix [MAX_FRAME_NUMBER][8];
 int Frame_ctr = 0;
 int para_ctr = 0;
 
@@ -21,27 +23,27 @@ int minHSV[3] = {0,0,40};
 int maxHSV[3] = {26,40,255};
 
 
-void calculate_MeanStd(){
+void calculate_MeanDev(){
 	
 	float average[8],std[8];
 	cout << "------------------- here? After Define param array-------------------" << endl;
 	for(int ctr=0; ctr<8; ctr++){
 
 		// Calculate Average
-		for(int Fctr=0; Fctr<200; Fctr++){
+		for(int Fctr=0; Fctr<MAX_FRAME_NUMBER; Fctr++){
 			average[ctr] += timeMatrix[Fctr][ctr];
 		}
 		cout << "------- here? After first average--------" << endl;
-		average[ctr] = average[ctr]/200;
+		average[ctr] = average[ctr]/MAX_FRAME_NUMBER;
 
 		// Calculate Stadard Deviation
-		for(int Fctr=0; Fctr<200; Fctr++){
+		for(int Fctr=0; Fctr<MAX_FRAME_NUMBER; Fctr++){
 			//std[ctr] += pow(timeMatrix[Fctr][ctr] - average[ctr],2);
 			//std[ctr] += (timeMatrix[Fctr][ctr]-average[ctr])*(timeMatrix[Fctr][ctr]-average[ctr]);
 			std[ctr] += timeMatrix[Fctr][ctr] - average[ctr];
 		}
 		cout << "------- here? After first std--------" << endl;
-		std[ctr] = sqrt(std[ctr]/200);
+		std[ctr] = sqrt(std[ctr]/MAX_FRAME_NUMBER);
 	
 	}
 	int Pctr = 0;
@@ -187,7 +189,7 @@ int main(int argc, char** argv) {
 	cout << "-----------Capture third Frame: -----------------" << (float)(std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count())/1000000 << "ms\n";
 
 
-    while(Frame_ctr < 200) {
+    while(Frame_ctr < MAX_FRAME_NUMBER) {
 	cout << "------------- Next Frame: " << Frame_ctr << "--------------"<< endl;
 	auto start1 = std::chrono::high_resolution_clock::now();
         eva_loop(camera);
@@ -204,7 +206,7 @@ int main(int argc, char** argv) {
     }
 	cout << "------------------- here? Before Entering cal_Meanstd() -------------------" << endl;
 
-	calculate_MeanStd();
+	calculate_MeanDev();
 
     return 0;
 }
