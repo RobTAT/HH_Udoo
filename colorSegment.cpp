@@ -10,10 +10,10 @@ static const char WINDOW[] = "Value Control Panel";
 
 Mat input_Image;
 
-int minRGB[3] = {70,15,15};
-int maxRGB[3] = {120,30,45};
-int minHSV[3] = {0,0,40};
-int maxHSV[3] = {26,40,255};
+int minRGB[3] = {122,10,10};
+int maxRGB[3] = {240,50,50};
+int minHSV[3] = {0,175,159};
+int maxHSV[3] = {180,255,250};
 
 
 Mat colorSegRGB(const Mat& src){
