@@ -31,10 +31,10 @@ int para_ctr = 0;
 int time_unit = us; // Modify unit of time here
 string time_unit_string = us_str; // Also the string
 
-int minRGB[3] = {70,15,15};
-int maxRGB[3] = {120,30,45};
-int minHSV[3] = {0,0,40};
-int maxHSV[3] = {26,40,255};
+int minRGB[3] = {122,10,10};
+int maxRGB[3] = {240,50,50};
+int minHSV[3] = {0,175,159};
+int maxHSV[3] = {180,255,250};
 
 auto base_timeline_s = std::chrono::high_resolution_clock::now();
 auto base_timeline_e = std::chrono::high_resolution_clock::now();
