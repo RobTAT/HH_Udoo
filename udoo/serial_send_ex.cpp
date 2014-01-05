@@ -3,7 +3,7 @@
 int main()
 {
     std::cout << "Opening fstream" << std::endl;
-    std::fstream file("/dev/tty.usbmodem641");
+    std::fstream file("/dev/ttymxc3");
     std::cout << "Sending integer" << std::endl;
     file << 5 ; // endl does flush, which may be important
     std::cout << "Data Sent" << std::endl;
