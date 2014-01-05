@@ -1,3 +1,4 @@
+
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -15,12 +16,11 @@ int maxRGB[3] = {240,50,50};
 int minHSV[3] = {0,175,159};
 int maxHSV[3] = {180,255,250};
 
-
 Mat colorSegRGB(const Mat& src){
 	assert(src.type() == CV_8UC3);
 	Mat filtered_Image;
-	inRange(src, Scalar(minRGB[2], minRGB[1], minRGB[0]), 
-		     Scalar(maxRGB[2], maxRGB[1], maxRGB[0]), filtered_Image);
+	inRange(src, Scalar(minRGB[0], minRGB[1], minRGB[2]), 
+		     Scalar(maxRGB[0], maxRGB[1], maxRGB[2]), filtered_Image);
 	return filtered_Image;
 }
 
@@ -28,8 +28,8 @@ Mat colorSegRGB(const Mat& src){
 Mat colorSegHSV(const Mat& src){
 	assert(src.type() == CV_8UC3);
 	Mat filtered_Image, HSV_Image;
-	cvtColor(src, filtered_Image, CV_BGR2HSV);
-	inRange(src, Scalar(minHSV[0], minHSV[1], minHSV[2]), 
+	cvtColor(src, HSV_Image, CV_BGR2HSV);
+	inRange(HSV_Image, Scalar(minHSV[0], minHSV[1], minHSV[2]), 
 		     Scalar(maxHSV[0], maxHSV[1], maxHSV[2]), filtered_Image);
 	return filtered_Image;
 }
@@ -68,7 +68,6 @@ int main(int argc, char** argv){
 	Size s = input_Image.size();
 	cout << "Image.height: " << s.height << endl;
 	cout << "Image.width: "	<< s.width << endl;
-	cout << "Image.type: "	<< input_Image.type() << endl;
 
 	namedWindow(WINDOW);
 	
@@ -79,18 +78,27 @@ int main(int argc, char** argv){
 	createTrackbar( "max G:", WINDOW, (maxRGB+1), 255, SliderCallBack_RGB );
 	createTrackbar( "max B:", WINDOW, (maxRGB+2), 255, SliderCallBack_RGB );
 
-	createTrackbar( "min H:", WINDOW, minHSV    , 180, SliderCallBack_HSV );
+	createTrackbar( "min H:", WINDOW, minHSV    , 255, SliderCallBack_HSV );
 	createTrackbar( "min S:", WINDOW, (minHSV+1), 255, SliderCallBack_HSV );
 	createTrackbar( "min V:", WINDOW, (minHSV+2), 255, SliderCallBack_HSV );
-	createTrackbar( "max H:", WINDOW, maxHSV    , 180, SliderCallBack_HSV );
+	createTrackbar( "max H:", WINDOW, maxHSV    , 255, SliderCallBack_HSV );
 	createTrackbar( "max S:", WINDOW, (maxHSV+1), 255, SliderCallBack_HSV );
 	createTrackbar( "max V:", WINDOW, (maxHSV+2), 255, SliderCallBack_HSV );
 
+
 	imshow("input_Image", input_Image);
+	imshow("RGB_filtered_Image", colorSegRGB(input_Image));
+	imshow("HSV_filtered_Image", colorSegHSV(input_Image));
 	waitKey();
 
 	return 0;
 }
+
+
+
+
+
+
 
 
 
