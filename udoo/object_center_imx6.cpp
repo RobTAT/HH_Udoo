@@ -92,28 +92,28 @@ Point find_Center(Mat src){
 */
 
         for(int i=0; i <= src.cols; i++){
-                if (img_diagram_x [i] > 15) {
+                if ((img_diagram_x [i] > 15)&&(img_diagram_x [i+1] > 15)&&(img_diagram_x [i+2] > 15)&&(img_diagram_x [i+3] > 15)&&(img_diagram_x [i+4] > 15)) {
                         x_start = i;
                         break;
                 }
         }
 
         for(int i=src.cols; i >= x_start; i--){
-                if (img_diagram_x [i] > 15) {
+                if ((img_diagram_x [i] > 15)&&(img_diagram_x [i+1] > 15)&&(img_diagram_x [i+2] > 15)&&(img_diagram_x [i+3] > 15)&&(img_diagram_x [i+4] > 15)) {
                         x_end = i;
                         break;
                 }
         }
 
         for(int j=0; j <= src.rows; j++){
-                if (img_diagram_y [j] > 15) {
+                if ((img_diagram_y [j] > 15)&&(img_diagram_y [j+1] > 15)&&(img_diagram_y [j+2] > 15)&&(img_diagram_y [j+3] > 15)&&(img_diagram_y [j+4] > 15)) {
                         y_start = j;
                         break;
                 }
         }
 
         for(int j=src.rows; j >= y_start; j--){
-                if (img_diagram_y [j] > 15) {
+                if ((img_diagram_y [j] > 15)&&(img_diagram_y [j+1] > 15)&&(img_diagram_y [j+2] > 15)&&(img_diagram_y [j+3] > 15)&&(img_diagram_y [j+4] > 15)) {
                         y_end = j;
                         break;
                 }
