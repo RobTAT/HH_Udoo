@@ -10,4 +10,4 @@ sudo apt-get -qq install libopencv-dev
 $sudo apt-get -qq install guvcview
 
 # Remote Access
-sudo apt-get install -qq putty tightvncserver
+sudo apt-get -qq install putty tightvncserver
