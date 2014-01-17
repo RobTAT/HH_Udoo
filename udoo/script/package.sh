@@ -15,5 +15,5 @@ $sudo apt-get -qq install python-opencv libhighgui2.3 libhighgui-dev ffmpeg libv
 $sudo apt-get -qq install cheese guvcview
 
 # Remote Access
-sudo apt-get install -qq putty tightvncserver xvnc4viewer
+sudo apt-get -qq install putty tightvncserver xvnc4viewer
 
